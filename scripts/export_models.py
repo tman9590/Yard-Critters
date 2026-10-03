@@ -17,7 +17,7 @@ from torch import nn
 
 INPUT_SHAPE = (1, 3, 480, 480)
 BACKENDS = ("onnx", "openvino", "coreml", "ncnn")
-ARTIFACT_VERSION = "v1.0.1"
+ARTIFACT_VERSION = "v1.0.2"
 
 
 class ScryptedSpeciesNet(nn.Module):
