@@ -17,8 +17,8 @@ def test_backend_urls_use_git_lfs_media_endpoint():
 def test_remote_backend_files_are_content_not_lfs_pointers():
     manifest = json.loads((ROOT / "config.json").read_text())
     for backend in manifest["backends"].values():
-        config_path = ROOT / backend["config"]
-        config = json.loads(config_path.read_text())
+        with urllib.request.urlopen(backend["config_url"], timeout=30) as response:
+            config = json.load(response)
         base_url = backend["config_url"].rsplit("/", 1)[0]
         for relative in config["files"]:
             url = f"{base_url}/{relative}"
