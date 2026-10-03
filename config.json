@@ -1,10 +1,10 @@
 {
-  "$schema": "https://raw.githubusercontent.com/tman9590/Yard-Critters/v1.0.2/schema.json",
+  "$schema": "https://raw.githubusercontent.com/tman9590/Yard-Critters/v1.0.3/schema.json",
   "name": "Yard Critters",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SpeciesNet v4.0.3a crop classifier packaged for Scrypted custom-classifier backends.",
   "input": {
-    "shape": [1, 3, 480, 480],
+    "shape": [1, 3, 224, 224],
     "color": "RGB",
     "range": [0.0, 1.0]
   },
@@ -12,19 +12,19 @@
   "backends": {
     "coreml": {
       "config": "models/coreml/config.json",
-      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.2/models/coreml/config.json"
+      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/coreml/config.json"
     },
     "openvino": {
       "config": "models/openvino/config.json",
-      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.2/models/openvino/config.json"
+      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/openvino/config.json"
     },
     "onnx": {
       "config": "models/onnx/config.json",
-      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.2/models/onnx/config.json"
+      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/onnx/config.json"
     },
     "ncnn": {
       "config": "models/ncnn/config.json",
-      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.2/models/ncnn/config.json"
+      "config_url": "https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/ncnn/config.json"
     }
   },
   "upstream": {

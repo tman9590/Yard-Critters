@@ -28,7 +28,7 @@ def main() -> None:
     for backend, entry in manifest["backends"].items():
         config_path = ROOT / entry["config"]
         config = json.loads(config_path.read_text())
-        assert config["input_shape"] == [1, 3, 480, 480]
+        assert config["input_shape"] == [1, 3, 224, 224]
         assert config["model"] == "resnet"
         assert config["labels"] == labels
         for relative in config["files"]:

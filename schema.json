@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/tman9590/Yard-Critters/v1.0.2/schema.json",
+  "$id": "https://raw.githubusercontent.com/tman9590/Yard-Critters/v1.0.3/schema.json",
   "title": "Yard Critters universal manifest",
   "type": "object",
   "required": ["name", "version", "input", "labels", "backends"],

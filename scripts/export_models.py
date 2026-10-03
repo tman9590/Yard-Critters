@@ -13,21 +13,28 @@ from pathlib import Path
 import numpy as np
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 
-INPUT_SHAPE = (1, 3, 480, 480)
+INPUT_SHAPE = (1, 3, 224, 224)
 BACKENDS = ("onnx", "openvino", "coreml", "ncnn")
-ARTIFACT_VERSION = "v1.0.2"
+ARTIFACT_VERSION = "v1.0.3"
 
 
 class ScryptedSpeciesNet(nn.Module):
-    """Adapt Scrypted's NCHW [0,1] tensor to SpeciesNet's NHWC [0,1] input."""
+    """Resize Scrypted's 224 crop internally, then adapt NCHW to SpeciesNet NHWC."""
 
     def __init__(self, model: nn.Module):
         super().__init__()
         self.model = model
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
+        image = F.interpolate(
+            image,
+            size=(480, 480),
+            mode="bilinear",
+            align_corners=False,
+        )
         return self.model(image.permute(0, 2, 3, 1))
 
 
@@ -132,17 +139,18 @@ def export_ncnn(repo: Path, onnx_path: Path) -> list[str]:
             last[3] = "out0"
             lines[-1] = " ".join(last)
             target_param.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    for suffix in (
-        ".pnnx.param",
-        ".pnnx.bin",
-        ".pnnx.onnx",
-        ".pnnxsim.onnx",
-        "_pnnx.py",
-        "_ncnn.py",
-    ):
-        auxiliary = onnx_path.parent / f"{generated_stem}{suffix}"
-        if auxiliary.exists():
-            auxiliary.unlink()
+    for stem in (generated_stem, onnx_path.stem):
+        for suffix in (
+            ".pnnx.param",
+            ".pnnx.bin",
+            ".pnnx.onnx",
+            ".pnnxsim.onnx",
+            "_pnnx.py",
+            "_ncnn.py",
+        ):
+            auxiliary = onnx_path.parent / f"{stem}{suffix}"
+            if auxiliary.exists():
+                auxiliary.unlink()
     return [target_param.name, target_bin.name]
 
 
