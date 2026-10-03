@@ -6,12 +6,12 @@ The repository includes weights for every Scrypted backend that currently implem
 
 | Scrypted plugin | Best fit | Config URL |
 | --- | --- | --- |
-| CoreML | Apple Silicon | `https://raw.githubusercontent.com/tman9590/Yard-Critters/main/models/coreml/config.json` |
-| OpenVINO | Intel CPU/iGPU/NPU | `https://raw.githubusercontent.com/tman9590/Yard-Critters/main/models/openvino/config.json` |
-| ONNX | NVIDIA, Windows, general CPU fallback | `https://raw.githubusercontent.com/tman9590/Yard-Critters/main/models/onnx/config.json` |
-| NCNN | ARM/Vulkan and lightweight Linux installs | `https://raw.githubusercontent.com/tman9590/Yard-Critters/main/models/ncnn/config.json` |
+| CoreML | Apple Silicon | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/main/models/coreml/config.json` |
+| OpenVINO | Intel CPU/iGPU/NPU | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/main/models/openvino/config.json` |
+| ONNX | NVIDIA, Windows, general CPU fallback | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/main/models/onnx/config.json` |
+| NCNN | ARM/Vulkan and lightweight Linux installs | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/main/models/ncnn/config.json` |
 
-The root [`config.json`](config.json) is the universal manifest and single reference for all backend URLs. Scrypted's loader still expects the backend-specific URL from the table because each runtime has a different native weight format.
+The root [`config.json`](config.json) is the universal manifest and single reference for all backend URLs. Scrypted's loader still expects the backend-specific URL from the table because each runtime has a different native weight format. Use the `media.githubusercontent.com` URLs exactly as shown: GitHub's `raw.githubusercontent.com` endpoint returns Git LFS pointer text instead of the model bytes, which causes `INVALID_PROTOBUF` and equivalent load errors.
 
 ## Install in Scrypted
 

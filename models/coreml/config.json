@@ -7,9 +7,9 @@
   ],
   "model": "resnet",
   "files": [
-    "yard-critters.mlpackage/Manifest.json",
-    "yard-critters.mlpackage/Data/com.apple.CoreML/model.mlmodel",
-    "yard-critters.mlpackage/Data/com.apple.CoreML/weights/weight.bin"
+    "yard-critters-v1.0.1.mlpackage/Manifest.json",
+    "yard-critters-v1.0.1.mlpackage/Data/com.apple.CoreML/model.mlmodel",
+    "yard-critters-v1.0.1.mlpackage/Data/com.apple.CoreML/weights/weight.bin"
   ],
   "labels": {
     "0": "White/Crandall'S Saddleback Tamarin",

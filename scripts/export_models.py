@@ -17,6 +17,7 @@ from torch import nn
 
 INPUT_SHAPE = (1, 3, 480, 480)
 BACKENDS = ("onnx", "openvino", "coreml", "ncnn")
+ARTIFACT_VERSION = "v1.0.1"
 
 
 class ScryptedSpeciesNet(nn.Module):
@@ -53,7 +54,7 @@ def write_config(repo: Path, backend: str, labels: dict[str, str], files: list[s
 
 
 def export_onnx(repo: Path, model: nn.Module, example: torch.Tensor) -> Path:
-    destination = repo / "models" / "onnx" / "yard-critters.onnx"
+    destination = repo / "models" / "onnx" / f"yard-critters-{ARTIFACT_VERSION}.onnx"
     torch.onnx.export(
         model,
         example,
@@ -70,9 +71,12 @@ def export_openvino(repo: Path, onnx_path: Path) -> list[str]:
     import openvino as ov
 
     model = ov.convert_model(onnx_path)
-    destination = repo / "models" / "openvino" / "yard-critters.xml"
+    destination = repo / "models" / "openvino" / f"yard-critters-{ARTIFACT_VERSION}.xml"
     ov.save_model(model, destination, compress_to_fp16=True)
-    return ["yard-critters.xml", "yard-critters.bin"]
+    return [
+        f"yard-critters-{ARTIFACT_VERSION}.xml",
+        f"yard-critters-{ARTIFACT_VERSION}.bin",
+    ]
 
 
 def export_coreml(repo: Path, model: nn.Module, example: torch.Tensor) -> list[str]:
@@ -87,14 +91,15 @@ def export_coreml(repo: Path, model: nn.Module, example: torch.Tensor) -> list[s
         minimum_deployment_target=ct.target.macOS13,
         compute_precision=ct.precision.FLOAT16,
     )
-    destination = repo / "models" / "coreml" / "yard-critters.mlpackage"
+    package = f"yard-critters-{ARTIFACT_VERSION}.mlpackage"
+    destination = repo / "models" / "coreml" / package
     if destination.exists():
         shutil.rmtree(destination)
     converted.save(destination)
     return [
-        "yard-critters.mlpackage/Manifest.json",
-        "yard-critters.mlpackage/Data/com.apple.CoreML/model.mlmodel",
-        "yard-critters.mlpackage/Data/com.apple.CoreML/weights/weight.bin",
+        f"{package}/Manifest.json",
+        f"{package}/Data/com.apple.CoreML/model.mlmodel",
+        f"{package}/Data/com.apple.CoreML/weights/weight.bin",
     ]
 
 
@@ -112,8 +117,8 @@ def export_ncnn(repo: Path, onnx_path: Path) -> list[str]:
         raise FileNotFoundError("pnnx did not create an NCNN parameter file")
     source_param = candidates[0]
     source_bin = source_param.with_suffix(".bin")
-    target_param = destination / "yard-critters.ncnn.param"
-    target_bin = destination / "yard-critters.ncnn.bin"
+    target_param = destination / f"yard-critters-{ARTIFACT_VERSION}.ncnn.param"
+    target_bin = destination / f"yard-critters-{ARTIFACT_VERSION}.ncnn.bin"
     if source_param != target_param:
         shutil.move(source_param, target_param)
     if source_bin != target_bin:
@@ -138,7 +143,7 @@ def export_ncnn(repo: Path, onnx_path: Path) -> list[str]:
         auxiliary = onnx_path.parent / f"{generated_stem}{suffix}"
         if auxiliary.exists():
             auxiliary.unlink()
-    return ["yard-critters.ncnn.param", "yard-critters.ncnn.bin"]
+    return [target_param.name, target_bin.name]
 
 
 def main() -> None:
@@ -160,7 +165,9 @@ def main() -> None:
     example = torch.zeros(INPUT_SHAPE, dtype=torch.float32)
 
     requested = BACKENDS if args.backend == "all" else (args.backend,)
-    onnx_path = repo / "models" / "onnx" / "yard-critters.onnx"
+    onnx_path = (
+        repo / "models" / "onnx" / f"yard-critters-{ARTIFACT_VERSION}.onnx"
+    )
     if "onnx" in requested or any(x in requested for x in ("openvino", "ncnn")):
         onnx_path = export_onnx(repo, model, example)
         write_config(repo, "onnx", labels, [onnx_path.name])

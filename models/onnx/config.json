@@ -7,7 +7,7 @@
   ],
   "model": "resnet",
   "files": [
-    "yard-critters.onnx"
+    "yard-critters-v1.0.1.onnx"
   ],
   "labels": {
     "0": "White/Crandall'S Saddleback Tamarin",

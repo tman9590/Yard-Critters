@@ -7,8 +7,8 @@
   ],
   "model": "resnet",
   "files": [
-    "yard-critters.ncnn.param",
-    "yard-critters.ncnn.bin"
+    "yard-critters-v1.0.1.ncnn.param",
+    "yard-critters-v1.0.1.ncnn.bin"
   ],
   "labels": {
     "0": "White/Crandall'S Saddleback Tamarin",
