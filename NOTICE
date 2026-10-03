@@ -1,0 +1,12 @@
+Yard Critters
+Copyright 2026 Yard Critters contributors
+
+This product includes converted model artifacts derived from Google SpeciesNet
+v4.0.3a (always_crop), Copyright 2025 Google LLC, distributed under the
+Apache License 2.0.
+
+Upstream project: https://github.com/google/cameratrapai
+Upstream model: https://www.kaggle.com/models/google/speciesnet
+
+The original taxonomy and label names are retained. "SpeciesNet" is used only
+to identify the upstream model and does not imply endorsement by Google.

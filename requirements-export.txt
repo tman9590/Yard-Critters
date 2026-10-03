@@ -1,0 +1,10 @@
+coremltools==9.0
+numpy>=1.26,<2.1
+ncnn>=1.0.2025
+onnx>=1.16,<1.20
+onnx2torch==1.5.15
+onnxruntime>=1.19,<1.20
+openvino>=2025.0
+pnnx>=2025.4.30
+torch>=2.7,<2.9
+torchvision>=0.22,<0.24
