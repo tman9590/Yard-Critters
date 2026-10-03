@@ -6,10 +6,10 @@ The repository includes weights for every Scrypted backend that currently implem
 
 | Scrypted plugin | Best fit | Config URL |
 | --- | --- | --- |
-| CoreML | Apple Silicon | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/coreml/config.json` |
-| OpenVINO | Intel CPU/iGPU/NPU | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/openvino/config.json` |
-| ONNX | NVIDIA, Windows, general CPU fallback | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/onnx/config.json` |
-| NCNN | ARM/Vulkan and lightweight Linux installs | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.3/models/ncnn/config.json` |
+| CoreML | Apple Silicon | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.4/models/coreml/config.json` |
+| OpenVINO | Intel CPU/iGPU/NPU | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.4/models/openvino/config.json` |
+| ONNX | NVIDIA, Windows, general CPU fallback | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.4/models/onnx/config.json` |
+| NCNN | ARM/Vulkan and lightweight Linux installs | `https://media.githubusercontent.com/media/tman9590/Yard-Critters/v1.0.4/models/ncnn/config.json` |
 
 The root [`config.json`](config.json) is the universal manifest and single reference for all backend URLs. Scrypted's loader still expects the backend-specific URL from the table because each runtime has a different native weight format. Use the version-pinned `media.githubusercontent.com` URLs exactly as shown: GitHub's `raw.githubusercontent.com` endpoint returns Git LFS pointer text instead of the model bytes, which causes `INVALID_PROTOBUF` and equivalent load errors.
 
@@ -28,6 +28,8 @@ Use **one classifier backend per camera**. Running duplicate classifiers increas
 SpeciesNet is a camera-trap model trained for wildlife imagery. Yard Critters uses the `always_crop` classifier because Scrypted already supplies a crop from its animal detector. This avoids feeding a tight crop to a model trained for full frames—the mismatch that commonly causes inaccurate labels.
 
 The model accepts a 224×224 RGB crop from Scrypted, resizes it to SpeciesNet's native 480×480 resolution inside the model graph, and outputs raw logits. Keeping the external input at 224×224 avoids Scrypted's `upscale not supported` failure on small detection crops. Scrypted applies softmax and records classifications at or above its built-in confidence threshold.
+
+The exported logits are temperature-scaled for Scrypted's fixed 0.50 custom-classifier cutoff. This preserves the highest-ranked SpeciesNet class while preventing valid fine-grained classifications from being silently omitted from NVR metadata.
 
 ## Backend support note
 

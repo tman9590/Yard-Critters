@@ -18,7 +18,8 @@ from torch.nn import functional as F
 
 INPUT_SHAPE = (1, 3, 224, 224)
 BACKENDS = ("onnx", "openvino", "coreml", "ncnn")
-ARTIFACT_VERSION = "v1.0.3"
+ARTIFACT_VERSION = "v1.0.4"
+SCRYPTED_LOGIT_SCALE = 2.0
 
 
 class ScryptedSpeciesNet(nn.Module):
@@ -35,7 +36,12 @@ class ScryptedSpeciesNet(nn.Module):
             mode="bilinear",
             align_corners=False,
         )
-        return self.model(image.permute(0, 2, 3, 1))
+        # Scrypted's custom ResNet adapter applies softmax and then drops every
+        # class below a fixed 0.50 threshold. SpeciesNet spreads probability
+        # across 2,498 fine-grained classes, so a correct top result can fall
+        # below that cutoff. Temperature-scale the logits without changing the
+        # winning class so Scrypted retains the species as NVR metadata.
+        return self.model(image.permute(0, 2, 3, 1)) * SCRYPTED_LOGIT_SCALE
 
 
 def labels_from_taxonomy(path: Path) -> dict[str, str]:
